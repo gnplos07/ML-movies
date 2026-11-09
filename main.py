@@ -1,6 +1,7 @@
 import pandas as pd
 import ast
 from nltk.stem.porter import PorterStemmer
+from sklearn.feature_extraction.text import ( CountVectorizer)
 
 movies = pd.read_csv("data/tmdb_5000_movies.csv")
 credits = pd.read_csv("data/tmdb_5000_credits.csv")
@@ -47,5 +48,4 @@ movies["tags"] = movies ["tags"].apply(
 
 movies ["tags"] = movies ["tags"].apply(
     lambda x: " ".join(ps.stem(w) for w in x.split()))
-print (ps.stem("loving", ps.stem("loved")))
-
+print(ps.stem("loving"), ps.stem("loved"))

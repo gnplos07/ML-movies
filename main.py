@@ -2,6 +2,7 @@ import pandas as pd
 import ast
 from nltk.stem.porter import PorterStemmer
 from sklearn.feature_extraction.text import ( CountVectorizer)
+from sklearn.metrics.pairwise import cosine_similarity
 
 movies = pd.read_csv("data/tmdb_5000_movies.csv")
 credits = pd.read_csv("data/tmdb_5000_credits.csv")
@@ -49,3 +50,20 @@ movies["tags"] = movies ["tags"].apply(
 movies ["tags"] = movies ["tags"].apply(
     lambda x: " ".join(ps.stem(w) for w in x.split()))
 print(ps.stem("loving"), ps.stem("loved"))
+
+cv = CountVectorizer(max_features = 5000,
+                     stop_words = "english")
+
+vectors = cv.fit_transform (movies ["tags"]).toarray()
+vectors.shape
+
+similarity = cosine_similarity(vectors)
+similarity.shape
+
+def reccomend(movie):
+    index = movies[movies["title"] == movie].index[0]
+    scores = list(enumerate(similarity[index]))
+    scores = sorted(scores, key = lambda x: x[1],
+                    reverse = True)
+    for i, score in scores[1::6]:
+        print(movies.iloc[i].title)

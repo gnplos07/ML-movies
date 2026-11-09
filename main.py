@@ -26,7 +26,7 @@ def director(text):
            if d["job"]  == "Director"]
 
 movies ["genres"] = movies ["genres"].apply(names)
-movies ["keywords"] = movies ["keyword"].apply(names)
+movies ["keywords"] = movies ["keywords"].apply(names)
 movies ["cast"] = movies ["cast"].apply(
     lambda x: names(x)[:3])
 movies ["crew"] = movies ["crew"].apply(director)

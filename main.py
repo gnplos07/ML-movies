@@ -1,5 +1,6 @@
 import pandas as pd
 import ast
+from nltk.stem.porter import PorterStemmer
 
 movies = pd.read_csv("data/tmdb_5000_movies.csv")
 credits = pd.read_csv("data/tmdb_5000_credits.csv")
@@ -37,6 +38,14 @@ for col in ["genres", "keywords", "cast", "crew"]:
         lambda x : [i.replace(" ", "") for i in x])
 
 movies ["tags"] =(movies["overview"]
-    + movies["genres"] + movies["keyword"]
+    + movies["genres"] + movies["keywords"]
     + movies["cast"]+ movies ["crew"])
+
+ps = PorterStemmer()
+movies["tags"] = movies ["tags"].apply(
+    lambda x: " ".join(x).lower())
+
+movies ["tags"] = movies ["tags"].apply(
+    lambda x: " ".join(ps.stem(w) for w in x.split()))
+print (ps.stem("loving", ps.stem("loved")))
 

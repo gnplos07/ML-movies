@@ -23,8 +23,20 @@ def director(text):
            if d["job"]  == "Director"]
 
 movies ["genres"] = movies ["genres"].apply(names)
-movies ["keyword"] = movies ["keyword"].apply(names)
+movies ["keywords"] = movies ["keyword"].apply(names)
 movies ["cast"] = movies ["cast"].apply(
     lambda x: names(x)[:3])
 movies ["crew"] = movies ["crew"].apply(director)
-movies.ilox[3]           
+movies.iloc[0]        
+
+movies["overview"] = movies ["overview"].apply(
+    lambda x: x.split())
+
+for col in ["genres", "keywords", "cast", "crew"]:
+    movies[col] = movies[col].apply(
+        lambda x : [i.replace(" ", "") for i in x])
+
+movies ["tags"] =(movies["overview"]
+    + movies["genres"] + movies["keyword"]
+    + movies["cast"]+ movies ["crew"])
+

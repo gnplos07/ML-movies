@@ -60,10 +60,23 @@ vectors.shape
 similarity = cosine_similarity(vectors)
 similarity.shape
 
-def reccomend(movie):
-    index = movies[movies["title"] == movie].index[0]
-    scores = list(enumerate(similarity[index]))
-    scores = sorted(scores, key = lambda x: x[1],
-                    reverse = True)
-    for i, score in scores[1::6]:
-        print(movies.iloc[i].title)
+def recommend(movie):
+    wanted_title = movie.strip().casefold()
+    matches = movies[movies["title"].str.casefold() == wanted_title]
+
+    if matches.empty:
+        return []
+
+    index = matches.index[0]
+    scores = sorted(
+        enumerate(similarity[index]),
+        key=lambda pair: pair[1],
+        reverse=True,
+    )
+
+    other_movies = [(i, score) for i, score in scores if i != index]
+
+    return [
+        {"title": movies.iloc[i]["title"], "score": float(score)}
+        for i, score in other_movies[:5]
+    ]
